@@ -19,7 +19,7 @@ const authRoutes = (app, fs) => {
     };
 
     const writeFile = (fileData, callback, filePath = dataPath, encoding = 'utf8') => {
-
+        console.log(fileData, callback, filePath)
         fs.writeFile(filePath, fileData, encoding, (err) => {
             if (err) {
                 throw err;
@@ -31,16 +31,17 @@ const authRoutes = (app, fs) => {
 
     // READ
     app.post('/auth', (req, res) => {
-        fs.readFile(dataPath, 'utf8', (err, data) => {
+        console.log('haha')
+        fs.readFile(
+            dataPath, 'utf8',
+            (err, data) => {
             if (err) {
                 throw err;
                 return
             }
-            console.log(req.body)
             let users = JSON.parse(data)
             users = Object.values(users);
             let req_user = users.find(user=>user.login===req.body.login);
-            console.log(req_user)
             if (!req_user) {
                 res.status(404).send({msg:'user does not exist', code: 404});
                 return
@@ -56,18 +57,32 @@ const authRoutes = (app, fs) => {
 
     // CREATE
     app.post('/register', (req, res) => {
+        fs.readFile(
+            dataPath, 'utf8',
+            (err, data) => {
+                if (err) {
+                    throw err;
+                    return
+                }
+                let parsed_data = JSON.parse(data);
+                let users = Object.values(parsed_data);
 
-        readFile(data => {
-                // Note: this isn't ideal for production use.
-                // ideally, use something like a UUID or other GUID for a unique ID value
+                let req_user = users.find(user=>user.login===req.body.login);
+                if (req_user) {
+                    res.status(500).send({msg:'user already exist', code: 500});
+                    return
+                }
                 const newUserId = Date.now().toString();
 
                 // add the new user
-                data[newUserId.toString()] = {...req.body, isAdmin: 0, user_id: newUserId.toString()};
-
-                writeFile(JSON.stringify(data, null, 2), () => {
-                    res.status(200).send('new user added');
+                parsed_data[newUserId.toString()] = {...req.body, isAdmin: 0, user_id: newUserId.toString()};
+                console.log(parsed_data)
+                writeFile(JSON.stringify(parsed_data), () => {
+                    res.status(200).send({msg:'new user added', code: 200});
                 });
+            });
+        readFile(data => {
+
             },
             true);
     });

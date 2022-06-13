@@ -1,23 +1,28 @@
 import React, {useCallback} from 'react';
-import {Text, View, Image, TouchableOpacity} from 'react-native';
+import {Text, View, Image, TouchableOpacity, ToastAndroid} from 'react-native';
 import styles from './sign_in.styles';
 import {Button, Title} from 'react-native-paper';
 import UiInputComponent from '../ui_form_components/ui_input/ui_input.component';
-import {useDispatch} from 'react-redux';
-import { auth_request } from "./sign_in.service";
+import {useDispatch, useSelector} from 'react-redux';
+import {auth_request} from './sign_in.service';
+import {authActions} from '../../../../redux/auth/auth.actions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SignInComponent = props => {
   const [login, setLogin] = React.useState(null);
   const [password, setPassword] = React.useState(null);
   const [errorsLogin, setErrorsLogin] = React.useState(null);
   const [errorsPassword, setErrorsPassword] = React.useState(null);
-
+  // const is_sign_in = useSelector(state => {
+  //   console.log(state);
+  //   state.auth_reducer.is_sig_in;
+  // });
   const dispatch = useDispatch();
 
-  // const changeSignInStatus = useCallback(
-  //   status => dispatch(envActions.isSignIn(status)),
-  //   [dispatch],
-  // );
+  const changeSignInStatus = useCallback(
+    status => dispatch(authActions.isSignIn(status)),
+    [dispatch],
+  );
 
   const auth = async () => {
     let have_errs = false;
@@ -49,9 +54,18 @@ const SignInComponent = props => {
       login,
       password,
     });
-    console.log('asdsdfsf');
-    await auth_request(form_data).then(res => {
+    await auth_request(form_data).then(async res => {
       console.log(res);
+      if (res.code === 200 && res.token) {
+        console.log('success');
+        ToastAndroid.showWithGravity(
+          'Success authorization!',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        await AsyncStorage.setItem('token', res.token);
+        changeSignInStatus(true);
+      }
     });
   };
 
@@ -85,7 +99,7 @@ const SignInComponent = props => {
       <Button
         mode="contained"
         onPress={() => {
-          auth()
+          auth();
         }}>
         Login
       </Button>

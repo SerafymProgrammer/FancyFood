@@ -3,18 +3,21 @@ import {StatusBar} from 'react-native';
 import {Provider as PaperProvider} from 'react-native-paper';
 import {global_theme} from './theme/global_theme';
 import AuthRouter from './routers/auth.router';
-import {Provider} from 'react-redux';
-import configureStore from './redux/store';
+import {useSelector} from 'react-redux';
+import HomeRouter from './routers/home_app.router';
+import DimensionsContextProvider from './contexts/dimensions.context';
 
-const store = configureStore();
 const App = () => {
+  const is_sign_in = useSelector(state => {
+    console.log(state);
+    return state.authReducer.is_sig_in;
+  });
   return (
-    <PaperProvider theme={global_theme}>
-      <Provider store={store}>
-        {/*<StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />*/}
-        <AuthRouter />
-      </Provider>
-    </PaperProvider>
+    <DimensionsContextProvider>
+      <PaperProvider theme={global_theme}>
+        {is_sign_in ? <HomeRouter /> : <AuthRouter />}
+      </PaperProvider>
+    </DimensionsContextProvider>
   );
 };
 

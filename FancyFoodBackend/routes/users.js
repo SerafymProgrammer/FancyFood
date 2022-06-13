@@ -18,7 +18,7 @@ const userRoutes = (app, fs) => {
     };
 
     const writeFile = (fileData, callback, filePath = dataPath, encoding = 'utf8') => {
-
+        console.log(fileData, callback, filePath)
         fs.writeFile(filePath, fileData, encoding, (err) => {
             if (err) {
                 throw err;
@@ -50,7 +50,7 @@ const userRoutes = (app, fs) => {
                 // add the new user
                 data[newUserId.toString()] = {...req.body, isAdmin: 0, reserves: []};
 
-                writeFile(JSON.stringify(data, null, 2), () => {
+                writeFile(JSON.stringify(data), () => {
                     res.status(200).send('new user added');
                 });
             },

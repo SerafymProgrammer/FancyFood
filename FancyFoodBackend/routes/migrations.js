@@ -1,97 +1,109 @@
 let tables =  [
 
     {
-        id: 'tb_b_1',
+        table_id: 'tb_b_1',
         title: 'Wonderful table for a banket',
         room: 'banket',
-        time: null,
-        date: null,
-        status: 'free',
-        food: [],
-        comment: '',
-        call_admin: false,
-        image: require('./images/banket1.jpeg'),
+        image: './images/banket1.jpeg',
     },
     {
-        id: 'tb_b_2',
+        table_id: 'tb_b_2',
         room: 'banket',
         title: 'Very warm place for a soulful feast',
-        time: null,
-        date: null,
-        status: 'free',
-        food: [],
-        comment: '',
-        call_admin: false,
-        image: require('./images/banket2.jpeg'),
+        image: './images/banket2.jpeg',
     },
 
     {
-        id: 'tb_h_1',
+        table_id: 'tb_h_1',
         room: 'hall',
         title: 'Romantic table for',
-        time: null,
-        date: null,
-        status: 'free',
-        food: [],
-        comment: '',
-        call_admin: false,
-        image: require('./images/hall1.jpg'),
+        image: './images/hall1.jpg',
     },
     {
-        id: 'tb_h_2',
+        table_id: 'tb_h_2',
         room: 'hall',
         title: 'Very warm place for a soulful feast',
-        time: null,
-        date: null,
-        status: 'free',
-        food: [],
-        comment: '',
-        call_admin: false,
-        image: require('./images/hall2.jpg'),
+        image: './images/hall2.jpg',
     },
     {
-        id: 'tb_h_3',
+        table_id: 'tb_h_3',
         room: 'hall',
         title: 'Romantic table for',
-        time: null,
-        date: null,
-        status: 'free',
-        food: [],
-        comment: '',
-        call_admin: false,
-        image: require('./images/hall3.jpg'),
+        image: './images/hall3.jpg',
     },
     {
-        id: 'tb_h_4',
+        table_id: 'tb_h_4',
         room: 'hall',
         title: 'Very warm place for a soulful feast',
-        time: null,
-        date: null,
-        status: 'free',
-        food: [],
-        comment: '',
-        call_admin: false,
-        image: require('./images/hall4.jpg'),
+        image:'./images/hall4.jpg',
     },
 
 ]
-const imageToBase64 = require('image-to-base64');
 
+
+let dishes = [
+    {
+        title: 'Spinach cream soup with mozzarella',
+        category: 'soups',
+        description: '',
+        image: './images/soup1.jpg'
+    },
+    {
+        category: 'soups',
+        title: 'Cream soup with grated mushrooms "Mushmules"',
+        description: '',
+        image: './images/soup2.jpg'
+    },
+    {
+        category: 'soups',
+        title: 'Lilac cream soup',
+        description: '',
+        image: './images/soup3.jpg'
+    },
+    {
+        category: 'salads',
+        title: 'Salad with Seleroy',
+        description: '',
+        image: './images/salad1.jpg'
+    },
+    {
+        category: 'salads',
+        title: 'Tuluzsky',
+        description: '',
+        image: './images/salad2.jpg'
+    },
+    {
+        category: 'salads',
+        title: 'Lilac salad',
+        description: '',
+        image: './images/salad3.jpg'
+
+    },
+    {
+        category: 'deserts',
+        title: 'La Monde',
+        description: '',
+        image: './images/desert1.jpg'
+
+    },
+    {
+        category: 'deserts',
+        title: 'Consomme',
+        description: '',
+        image: './images/desert2.jpg'
+
+        },
+    {
+        category: 'deserts',
+        title: 'Maron Claire',
+        description: '',
+        image: './images/desert3.jpg'
+    },
+]
 const tables_migrations = (app, fs) => {
 
     // variables
     const dataPath = './data/tables.json';
-
-    // helper methods
-    const readFile = (callback, returnJson = false, filePath = dataPath, encoding = 'utf8') => {
-        fs.readFile(filePath, encoding, (err, data) => {
-            if (err) {
-                throw err;
-            }
-
-            callback(returnJson ? JSON.parse(data) : data);
-        });
-    };
 
     const writeFile = (fileData, callback, filePath = dataPath, encoding = 'utf8') => {
 
@@ -105,32 +117,69 @@ const tables_migrations = (app, fs) => {
     };
 
     const do_migration = async () => {
-        let new_arr = tables.map(async (item) => {
-            imageToBase64("URL") // insert image url here.
-                .then((response) => {
-                        console.log(response);  // the response will be the string base64.
-                    }
-                )
-                .catch(
-                    (error) => {
-                        console.log(error);
-                    }
-                )
-        })
-        readFile(data => {
-            // Note: this isn't ideal for production use.
-            // ideally, use something like a UUID or other GUID for a unique ID value
-            const newUserId = Date.now().toString();
+        fs.readFile(
+            dataPath, 'utf8',
+            (err, data) => {
+                if (err) {
+                    throw err;
+                    return
+                }
+                let new_data = {};
+                tables.map(async (item) => {
+                    let path = item.image;
+                    let buff = fs.readFileSync(path);
+                    let base64data = buff.toString('base64');
+                    let img_to_frontend = 'data:image/png;base64, '+base64data;
+                    const newId = Date.now().toString();
+                    new_data[newId.toString()] = {...item, table_id: newId, image: img_to_frontend};
 
-            // add the new user
-            data[newUserId.toString()] = {...req.body, isAdmin: 0, reserves: []};
-
-            writeFile(JSON.stringify(data, null, 2), () => {
-                // res.status(200).send('new user added');
-            });
-        }, false)
+                })
+                writeFile(JSON.stringify(new_data), () => {
+                });
+            }
+        )
     }
-
+    do_migration()
 };
+const dishes_migrations = (app, fs) => {
 
-module.exports = userRoutes;
+    // variables
+    const dataPath = './data/dishes.json';
+
+    const writeFile = (fileData, callback, filePath = dataPath, encoding = 'utf8') => {
+
+        fs.writeFile(filePath, fileData, encoding, (err) => {
+            if (err) {
+                throw err;
+            }
+
+            callback();
+        });
+    };
+
+    const do_migration = async () => {
+        fs.readFile(
+            dataPath, 'utf8',
+            (err, data) => {
+                if (err) {
+                    throw err;
+                    return
+                }
+                let new_data = {};
+                dishes.map(async (item) => {
+                    let path = item.image;
+                    let buff = fs.readFileSync(path);
+                    let base64data = buff.toString('base64');
+                    let img_to_frontend = 'data:image/png;base64, '+base64data;
+                    const newId = Date.now().toString();
+                    new_data[newId.toString()] = {...item, dish_id: newId, image: img_to_frontend};
+
+                })
+                writeFile(JSON.stringify(new_data), () => {
+                });
+            }
+        )
+    }
+    do_migration()
+};
+module.exports = dishes_migrations;

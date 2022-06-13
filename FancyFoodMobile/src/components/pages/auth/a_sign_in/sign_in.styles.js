@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   },
   haveAnAccText: {
     marginTop: 8,
+    color: 'black',
   },
 });
 

@@ -1,6 +1,6 @@
 import {IS_SIGN_IN} from './auth.types';
 
-export const envActions = {
+export const authActions = {
   isSignIn: status => {
     return {
       type: IS_SIGN_IN,

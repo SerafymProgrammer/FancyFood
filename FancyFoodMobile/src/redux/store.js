@@ -1,13 +1,13 @@
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
 import thunk from 'redux-thunk';
 
 //reducers
-import { authReducer } from "./auth/auth.reduser";
-
-
+import {authReducer} from './auth/auth.reduser';
+import {homeReducer} from './home/home.reduser';
 
 const rootReducer = combineReducers({
-  auth_reducer: authReducer,
+  authReducer,
+  homeReducer,
 });
 
 const configureStore = () => {

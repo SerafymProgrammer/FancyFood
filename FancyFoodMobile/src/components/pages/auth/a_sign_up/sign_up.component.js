@@ -1,8 +1,18 @@
 import React from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  AsyncStorage,
+  Text,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {ErrorsText} from '../ui_form_components/error_text/error_text.component';
 import styles from './sign_up.styles';
-import {Button} from "react-native-paper";
+import {Button, Title} from 'react-native-paper';
+import PhoneInput from 'react-native-phone-number-input';
+import {register_request} from './sign_up.service';
+import UiInputComponent from '../ui_form_components/ui_input/ui_input.component';
 
 const SignUpComponent = props => {
   const [login, setLogin] = React.useState('');
@@ -45,45 +55,37 @@ const SignUpComponent = props => {
       return;
     }
 
-    let users = await AsyncStorage.getItem('users');
-    users = await JSON.parse(users);
-
-    let checkName = await users.filter(item => item.login === login);
-    if (checkName.length) {
-      setErrorsLogin('already_exists');
-      return;
-    }
-    await AsyncStorage.setItem(
-      'users',
-      JSON.stringify([
-        ...users,
-        {
-          login,
-          password,
-          phone,
-          isAdmin: false,
-        },
-      ]),
-    );
-    await props.navigation.navigate('Login');
-
-    // props.navigation.navigate('Main')
+    let form_data = JSON.stringify({
+      phone: formattedPhone,
+      login,
+      password,
+    });
+    await register_request(form_data).then(res => {
+      if (res.code === 200) {
+        ToastAndroid.showWithGravity(
+          'Success registration!',
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        props.navigation.navigate('sign_in');
+      }
+    });
   };
 
   return (
     <View style={styles.sectionContainer}>
       <View style={{alignItems: 'center', marginTop: 20}}>
-        <Image
-          source={'s'}
-          style={{
-            width: '80%',
-            marginTop: 5,
-            borderRadius: 0,
-            borderWidth: 2,
-            height: 80,
-            borderColor: '#000000',
-          }}
-        />
+        {/*<Image*/}
+        {/*  source={'s'}*/}
+        {/*  style={{*/}
+        {/*    width: '80%',*/}
+        {/*    marginTop: 5,*/}
+        {/*    borderRadius: 0,*/}
+        {/*    borderWidth: 2,*/}
+        {/*    height: 80,*/}
+        {/*    borderColor: '#000000',*/}
+        {/*  }}*/}
+        {/*/>*/}
       </View>
       <Title style={styles.title}>Register</Title>
       <View style={styles.inputWrap}>
@@ -107,7 +109,7 @@ const SignUpComponent = props => {
           }}
           ref={phoneInput}
           value={phone}
-          defaultCode="DM"
+          defaultCode="UA"
           layout="second"
           onChangeText={text => {
             setPhone(text);
@@ -122,30 +124,24 @@ const SignUpComponent = props => {
         />
         <ErrorsText error={errorsPhone} />
       </View>
-      <View style={styles.inputWrap}>
-        <TextInput
-          error={errorsLogin}
-          label="login"
-          value={login}
-          onChangeText={text => {
-            setErrorsLogin(null);
-            setLogin(text);
-          }}
-        />
-        <ErrorsText error={errorsLogin} />
-      </View>
-      <View style={styles.inputWrap}>
-        <TextInput
-          error={errorsPassword}
-          label="password"
-          value={password}
-          onChangeText={text => {
-            setErrorsPassword(null);
-            setPassword(text);
-          }}
-        />
-        <ErrorsText error={errorsPassword} />
-      </View>
+      <UiInputComponent
+        error={errorsLogin}
+        label="login"
+        value={login}
+        onChangeText={text => {
+          setErrorsLogin(null);
+          setLogin(text);
+        }}
+      />
+      <UiInputComponent
+        error={errorsPassword}
+        label="password"
+        value={password}
+        onChangeText={text => {
+          setErrorsPassword(null);
+          setPassword(text);
+        }}
+      />
 
       <Button mode="contained" onPress={() => regist()}>
         Register
