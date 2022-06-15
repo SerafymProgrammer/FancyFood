@@ -37,51 +37,21 @@ const dishesRoutes = (app, fs) => {
                     return
                 }
                 let dishes = JSON.parse(data)
-                dishes = Object.values(users);
+                dishes = Object.values(dishes);
                 let res_data = {};
                 let temp_caths = []
+                console.log('dishes', dishes.length)
                 dishes.map(dish => {
-                   if (!temp_caths.find(item=>item===dish.cathegory)) {
-                       temp_caths.push(dish.cathegory)
-                       res_data[dish.cathegory] = [{...dish}];
+                   if (!temp_caths.find(item=>item===dish.category)) {
+                       temp_caths.push(dish.category)
+                       res_data[dish.category] = [{...dish}];
                    } else {
-                       res_data[dish.cathegory] = [...res_data[dish.cathegory], {...dish}]
+                       res_data[dish.category] = [...res_data[dish.category], {...dish}]
                    }
                 });
-                res.status(200).send({code: 200, data: JSON.stringify(res_data)});
+                // console.log( JSON.stringify(res_data))
+                res.status(200).send({code: 200, data: res_data});
             });
-    });
-
-    // CREATE
-    app.post('/register', (req, res) => {
-        fs.readFile(
-            dataPath, 'utf8',
-            (err, data) => {
-                if (err) {
-                    throw err;
-                    return
-                }
-                let parsed_data = JSON.parse(data);
-                let users = Object.values(parsed_data);
-
-                let req_user = users.find(user=>user.login===req.body.login);
-                if (req_user) {
-                    res.status(500).send({msg:'user already exist', code: 500});
-                    return
-                }
-                const newUserId = Date.now().toString();
-
-                // add the new user
-                parsed_data[newUserId.toString()] = {...req.body, isAdmin: 0, user_id: newUserId.toString()};
-                console.log(parsed_data)
-                writeFile(JSON.stringify(parsed_data), () => {
-                    res.status(200).send({msg:'new user added', code: 200});
-                });
-            });
-        readFile(data => {
-
-            },
-            true);
     });
 };
 

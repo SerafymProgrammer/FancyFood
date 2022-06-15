@@ -1,7 +1,7 @@
 import {IS_SIGN_IN, SET_MENU} from './home.types';
 
 const initialState = {
-  menu: [],
+  menu: null,
 };
 
 export const homeReducer = (state = initialState, action) => {

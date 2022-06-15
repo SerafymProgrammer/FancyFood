@@ -46,58 +46,64 @@ let dishes = [
         title: 'Spinach cream soup with mozzarella',
         category: 'soups',
         description: '',
-        image: './images/soup1.jpg'
+        image: './images/soup1.jpg',
+        price: 12
     },
     {
         category: 'soups',
         title: 'Cream soup with grated mushrooms "Mushmules"',
         description: '',
-        image: './images/soup2.jpg'
+        image: './images/soup2.jpg',
+        price: 12
     },
     {
         category: 'soups',
         title: 'Lilac cream soup',
         description: '',
-        image: './images/soup3.jpg'
+        image: './images/soup3.jpg',
+        price: 12
     },
     {
         category: 'salads',
         title: 'Salad with Seleroy',
         description: '',
-        image: './images/salad1.jpg'
+        image: './images/salad1.jpg',
+        price: 12
     },
     {
         category: 'salads',
         title: 'Tuluzsky',
         description: '',
-        image: './images/salad2.jpg'
+        image: './images/salad2.jpg',
+        price: 12
     },
     {
         category: 'salads',
         title: 'Lilac salad',
         description: '',
-        image: './images/salad3.jpg'
-
+        image: './images/salad3.jpg',
+        price: 12
     },
     {
         category: 'deserts',
         title: 'La Monde',
         description: '',
-        image: './images/desert1.jpg'
-
+        image: './images/desert1.jpg',
+        price: 12
     },
     {
         category: 'deserts',
         title: 'Consomme',
         description: '',
-        image: './images/desert2.jpg'
-
+        image: './images/desert2.jpg',
+        price: 12
         },
     {
         category: 'deserts',
         title: 'Maron Claire',
         description: '',
-        image: './images/desert3.jpg'
+        image: './images/desert3.jpg',
+        price: 12
     },
 ]
 const tables_migrations = (app, fs) => {
@@ -141,7 +147,7 @@ const tables_migrations = (app, fs) => {
     }
     do_migration()
 };
-const dishes_migrations = (app, fs) => {
+const dishes_migrations = (app, fs, set_status_migration) => {
 
     // variables
     const dataPath = './data/dishes.json';
@@ -170,13 +176,15 @@ const dishes_migrations = (app, fs) => {
                     let path = item.image;
                     let buff = fs.readFileSync(path);
                     let base64data = buff.toString('base64');
-                    let img_to_frontend = 'data:image/png;base64, '+base64data;
+                    let img_to_frontend = 'data:image/jpg;base64, '+base64data;
                     const newId = Date.now().toString();
                     new_data[newId.toString()] = {...item, dish_id: newId, image: img_to_frontend};
 
                 })
-                writeFile(JSON.stringify(new_data), () => {
-                });
+                console.log(JSON.stringify(new_data))
+                writeFile(JSON.stringify(new_data), ()=>{
+                    set_status_migration(true)
+                } );
             }
         )
     }

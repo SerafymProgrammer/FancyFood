@@ -1,4 +1,4 @@
-import React, {useCallback} from '.';
+import React, {useCallback} from 'react';
 import {Text, View, Image} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {authActions} from '../../../../redux/auth/auth.actions';
@@ -10,7 +10,9 @@ const HeaderComponent = props => {
   const [openMenu, setOpenMenu] = React.useState(false);
   const [currUser, setCurrUser] = React.useState(null);
 
-  const is_sign_in = useSelector(state => state.envReducer.is_sig_in);
+  const is_sign_in = useSelector(state => {
+    return state.authReducer.is_sig_in;
+  });
   const dispatch = useDispatch();
 
   const changeSignInStatus = useCallback(
@@ -58,10 +60,10 @@ const HeaderComponent = props => {
             alignItems: 'center',
             zIndex: 15000000,
           }}>
-          <Image
-            source={require('./images/mini_logo.jpg')}
-            style={{height: 50, width: 55, marginLeft: 10}}
-          />
+          {/*<Image*/}
+          {/*  source={require('./images/mini_logo.jpg')}*/}
+          {/*  style={{height: 50, width: 55, marginLeft: 10}}*/}
+          {/*/>*/}
           <Text style={{marginLeft: 20, fontSize: 20, color: '#fff'}}>
             {props.title}
           </Text>

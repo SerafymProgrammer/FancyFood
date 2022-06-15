@@ -1,26 +1,45 @@
-import React, {useContext, useState} from 'react';
-import {
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  ImageBackground,
-} from 'react-native';
+import React, {useContext, useCallback} from 'react';
+import {View, ScrollView, ImageBackground} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from './menu_page.styles';
-import {Button, Title, List, Card, Paragraph} from 'react-native-paper';
+import {
+  Button,
+  Title,
+  List,
+  Card,
+  Paragraph,
+  ActivityIndicator,
+} from 'react-native-paper';
 import {DimensionsContext} from '../../../../contexts/dimensions.context';
 import HeaderComponent from '../header/header.component';
+import {get_dishes_request} from './menu_page.service';
+import {useDispatch, useSelector} from 'react-redux';
+import {homeActions} from '../../../../redux/home/home.actions';
+import {ImagesContext} from '../../../../contexts/images.context';
 
 const MenuPageComponent = props => {
-  const [menu_data, set_menu_data] = useState([]);
+  // const [menu_data, set_menu_data] = useState(null);
+  const images = useContext(ImagesContext);
   const {width, height} = useContext(DimensionsContext);
+  const menu_data = useSelector(state => {
+    return state.homeReducer.menu;
+  });
+  const dispatch = useDispatch();
+
+  const set_menu = useCallback(
+    menu => dispatch(homeActions.set_menu(menu)),
+    [dispatch],
+  );
   const checkLog = async () => {
     const log = await AsyncStorage.getItem('token');
-
     if (!log) {
       await props.navigation.navigate('Login');
+    } else {
+      get_dishes_request().then(res => {
+        if (res.code === 200) {
+          set_menu(res.data);
+        }
+      });
     }
   };
 
@@ -28,20 +47,19 @@ const MenuPageComponent = props => {
     checkLog();
   }, []);
 
-  return (
+  return menu_data ? (
     <View style={styles.mainContainer}>
       <HeaderComponent title={'Menu'} navigation={props.navigation} />
       {/* require('./interer.jpg') */}
-      {/*<ImageBackground*/}
-      {/*  source={require('./images/menu_interer.jpg')}*/}
-      {/*  style={{*/}
-      {/*    flex: 1,*/}
-      {/*    resizeMode: 'cover',*/}
-      {/*    // justifyContent: "center",*/}
-      {/*    alignItems: 'flex-end',*/}
-      {/*    height: '100%',*/}
-      {/*    width: '100%',*/}
-      {/*  }}>*/}
+      <ImageBackground
+        source={images.menu_interer}
+        style={{
+          flex: 1,
+          resizeMode: 'cover',
+          alignItems: 'flex-end',
+          height: '100%',
+          width: '100%',
+        }}>
         <ScrollView
           style={{
             // backgroundColor:'#000000a0',
@@ -49,31 +67,29 @@ const MenuPageComponent = props => {
             height: '100%',
           }}>
           <View style={{paddingHorizontal: 10}}>
-            {menu_data.map((item, index) => (
-              <List.Accordion
-                key={item.title + index}
-                title={item.title}
-                id={index}
-                style={{
-                  backgroundColor: '#c2c2c2',
-                  marginVertical: 5,
-                  borderRadius: 12,
-                }}>
-                {item.data.map((el, ind) => (
-                  <Card style={{marginBottom: 10}} key={ind + el.title}>
-                    <Card.Cover source={el.image} />
-                    <Card.Content>
-                      <Title>{el.title}</Title>
-                      <Paragraph>{el.price + '$'}</Paragraph>
-                    </Card.Content>
-                    {/* <Card.Actions>
-                    <Button>Cancel</Button>
-                    <Button>Ok</Button>
-                  </Card.Actions> */}
-                  </Card>
-                ))}
-              </List.Accordion>
-            ))}
+            <List.Section style={{backgroundColor: '#c2c2c2'}}>
+              {Object.keys(menu_data).map((item, index) => (
+                <List.Accordion
+                  key={item + index}
+                  title={item}
+                  id={index}
+                  style={{
+                    backgroundColor: '#c2c2c2',
+                    borderBottomColor: '#9cc9b2',
+                    borderBottomWidth: 2,
+                  }}>
+                  {menu_data[item].map((el, ind) => (
+                    <Card style={{marginBottom: 10}} key={el.dish_id}>
+                      <Card.Cover source={{uri: el.image}} />
+                      <Card.Content>
+                        <Title>{el.title}</Title>
+                        <Paragraph>{el.price + '$'}</Paragraph>
+                      </Card.Content>
+                    </Card>
+                  ))}
+                </List.Accordion>
+              ))}
+            </List.Section>
           </View>
         </ScrollView>
       </ImageBackground>
@@ -92,6 +108,8 @@ const MenuPageComponent = props => {
         Reserve a table
       </Button>
     </View>
+  ) : (
+    <ActivityIndicator />
   );
 };
 

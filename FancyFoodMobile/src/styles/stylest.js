@@ -10,8 +10,9 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#799898',
+    backgroundColor: '#82c4bb',
     height: '100%',
+    paddingBottom: 100,
   },
   loginContainer: {
     // marginTop: 10,

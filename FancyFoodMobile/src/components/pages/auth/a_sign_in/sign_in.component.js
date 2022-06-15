@@ -1,9 +1,9 @@
 import React, {useCallback} from 'react';
-import {Text, View, Image, TouchableOpacity, ToastAndroid} from 'react-native';
+import {Text, View, TouchableOpacity, ToastAndroid} from 'react-native';
 import styles from './sign_in.styles';
 import {Button, Title} from 'react-native-paper';
 import UiInputComponent from '../ui_form_components/ui_input/ui_input.component';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch} from 'react-redux';
 import {auth_request} from './sign_in.service';
 import {authActions} from '../../../../redux/auth/auth.actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -13,10 +13,6 @@ const SignInComponent = props => {
   const [password, setPassword] = React.useState(null);
   const [errorsLogin, setErrorsLogin] = React.useState(null);
   const [errorsPassword, setErrorsPassword] = React.useState(null);
-  // const is_sign_in = useSelector(state => {
-  //   console.log(state);
-  //   state.auth_reducer.is_sig_in;
-  // });
   const dispatch = useDispatch();
 
   const changeSignInStatus = useCallback(
