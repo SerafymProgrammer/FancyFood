@@ -106,7 +106,7 @@ let dishes = [
         price: 12
     },
 ]
-const tables_migrations = (app, fs) => {
+const tables_migrations = (app, fs,) => {
 
     // variables
     const dataPath = './data/tables.json';
@@ -135,19 +135,34 @@ const tables_migrations = (app, fs) => {
                     let path = item.image;
                     let buff = fs.readFileSync(path);
                     let base64data = buff.toString('base64');
-                    let img_to_frontend = 'data:image/png;base64, '+base64data;
+                    let img_to_frontend = 'data:image/jpg;base64, '+base64data;
                     const newId = Date.now().toString();
-                    new_data[newId.toString()] = {...item, table_id: newId, image: img_to_frontend};
+                    new_data[newId.toString()] = {...item, table_id: newId, image: img_to_frontend, status: 'avalaible'};
 
                 })
+
+
+
+                    // writeFile(, , );
                 writeFile(JSON.stringify(new_data), () => {
+                    fs.readFile(
+                        './migration_config.json', 'utf8', (err, data)=>{
+                            let data_ = JSON.parse(data)
+                            console.log(data_)
+                            fs.writeFile('./migration_config.json' , JSON.stringify({...data_, success_migration: true}), 'utf8', (err) => {
+                                if (err) {
+                                    throw err;
+                                }
+                                console.log('fghfgh')
+                            });
+                        })
                 });
             }
         )
     }
     do_migration()
 };
-const dishes_migrations = (app, fs, set_status_migration) => {
+const dishes_migrations = (app, fs,) => {
 
     // variables
     const dataPath = './data/dishes.json';
@@ -183,11 +198,14 @@ const dishes_migrations = (app, fs, set_status_migration) => {
                 })
                 console.log(JSON.stringify(new_data))
                 writeFile(JSON.stringify(new_data), ()=>{
-                    set_status_migration(true)
+                    writeFile(JSON.stringify({success_migration: true}), ()=>{
+
+                    }, '../migration_config.json' );
+
                 } );
             }
         )
     }
     do_migration()
 };
-module.exports = dishes_migrations;
+module.exports = tables_migrations;

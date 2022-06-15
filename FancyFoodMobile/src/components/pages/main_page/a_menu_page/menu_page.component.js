@@ -96,7 +96,7 @@ const MenuPageComponent = props => {
       <Button
         mode="contained"
         onPress={() => {
-          props.navigation.navigate('Reserve');
+          props.navigation.navigate('booking_table_page');
         }}
         style={{
           position: 'absolute',

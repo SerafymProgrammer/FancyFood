@@ -1,6 +1,6 @@
 const userRoutes = require('./users');
 const authRoutes = require("./auth");
-const migrations = require("./migrations");
+const migrations = require("../migrations");
 const dishesRoutes = require("./dishes");
 const ordersRoutes = require("./orders");
 const tablesRoutes = require("./tables");
@@ -23,9 +23,6 @@ const appRouter = (app, fs) => {
     dishesRoutes(app, fs)
     ordersRoutes(app, fs)
     tablesRoutes(app, fs)
-    if (!success_migration) {
-        // migrations(app, fs, set_status_migration)
-    }
 
 };
 

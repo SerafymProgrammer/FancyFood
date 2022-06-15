@@ -33,6 +33,7 @@ const tablesRoutes = (app, fs) => {
 
     // READ
     app.get('/free_tables', (req, res) => {
+        console.log('hasb hdcsbf')
        let date_time = req.params.date_time;
         fs.readFile(
             dataPathOrders, 'utf8',
@@ -48,14 +49,12 @@ const tablesRoutes = (app, fs) => {
                         orders = Object.values(orders);
                         let tables = JSON.parse(data_tables)
                         tables = Object.values(tables);
-
+                        orders = orders.filter(order=>order.date>=date_time);
                         orders.forEach((order)=>{
-                           if(Number(order.date)!==Number(date_time)){
-                               tables=tables.filter(table=>table.table_id!==order.table_id)
-                           }
+                            tables=tables.map(table=>({...table, status:table.table_id===order.table_id?'reserved': table.status, }))
                         })
 
-                        res.status(200).send({code: 200, data: JSON.stringify(create_res_data(tables))});
+                        res.status(200).send({code: 200, data: create_res_data(tables)});
                     }
 
                     )
