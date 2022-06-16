@@ -72,7 +72,7 @@ const ordersRoutes = (app, fs) => {
     })
 
     app.get('/orders_by_user', (req, res) => {
-        let user_id = req.params.user_id;
+        let user_id = req.query.user_id;
         fs.readFile(
             dataPathOrders, 'utf8',
             (err, data_orders) => {
@@ -136,7 +136,7 @@ const ordersRoutes = (app, fs) => {
     });
 
     app.get('/del_order', (req, res) => {
-        let order_id = req.params.o_id;
+        let order_id = req.query.o_id;
         fs.readFile(
             dataPathOrders, 'utf8',
             (err, data_orders)=>{

@@ -6,6 +6,6 @@ export const get_orders = () => {
 };
 
 export const del_order = order_id => {
-  let url = `${MAIN_URL}/free_tables?order_id=${order_id}`;
+  let url = `${MAIN_URL}/del_order?o_id=${order_id}`;
   return fetch(url).then(res => res.json());
 };

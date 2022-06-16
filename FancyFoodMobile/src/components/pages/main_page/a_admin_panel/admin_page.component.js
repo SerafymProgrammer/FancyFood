@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   ScrollView,
+  ToastAndroid,
 } from 'react-native';
 import HeaderComponent from '../header/header.component';
 import styles from './admin_page.styles';
@@ -20,7 +21,7 @@ import {
 } from 'react-native-paper';
 import {reducePrice, textOverflow} from '../../../../utils/helpers';
 import {ImagesContext} from '../../../../contexts/images.context';
-import {get_orders} from './admin_page.service';
+import {del_order, get_orders} from './admin_page.service';
 
 const AdminPageComponent = props => {
   const [orders, set_orders] = useState([]);
@@ -161,7 +162,9 @@ const AdminPageComponent = props => {
                   <View style={{paddingHorizontal: 10, marginTop: 20}}>
                     <Button
                       mode="text"
-                      onPress={() => {}}
+                      onPress={() => {
+                        set_order_status_modal(item.order_id);
+                      }}
                       color={'#a09cc9'}
                       style={{
                         // marginHorizontal: 10,
@@ -197,7 +200,23 @@ const AdminPageComponent = props => {
               mode="contained"
               color={'#c9a19c'}
               style={{zIndex: 15000000, marginVertical: 10}}
-              onPress={() => {}}>
+              onPress={() => {
+                del_order(order_status_modal).then(res => {
+                  if (res.code === 200) {
+                    set_orders(
+                      orders.filter(
+                        order => order.order_id !== order_status_modal,
+                      ),
+                    );
+                    set_order_status_modal(false);
+                    ToastAndroid.showWithGravity(
+                      'Success break order!',
+                      ToastAndroid.SHORT,
+                      ToastAndroid.CENTER,
+                    );
+                  }
+                });
+              }}>
               <Text>Break order</Text>
             </Button>
           </Dialog.Content>

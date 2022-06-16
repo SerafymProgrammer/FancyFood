@@ -75,7 +75,7 @@ const tablesRoutes = (app, fs) => {
     });
 
     app.get('/del_table', (req, res) => {
-        let table_id = req.params.t_id;
+        let table_id = req.query.t_id;
                 fs.readFile(
                     dataPath, 'utf8',
                     (err, data_tables)=>{
