@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import MenuPageComponent from '../components/pages/main_page/a_menu_page/menu_page.component';
 import BookingTableComponent from '../components/pages/main_page/a_booking_table_page/booking_table_page.component';
 import AdminPageComponent from '../components/pages/main_page/a_admin_panel/admin_page.component';
+import MyReservesComponent from '../components/pages/main_page/a_my_reserves/my_reserves.component';
 
 const HomeStack = createNativeStackNavigator();
 
@@ -19,6 +20,11 @@ const HomeRouter = () => {
         <HomeStack.Screen
           name="booking_table_page"
           component={BookingTableComponent}
+        />
+
+        <HomeStack.Screen
+          name="my_reserves_page"
+          component={MyReservesComponent}
         />
 
         <HomeStack.Screen name="admin_panel" component={AdminPageComponent} />

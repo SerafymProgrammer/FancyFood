@@ -108,7 +108,7 @@ const ordersRoutes = (app, fs) => {
                                     new_order.table = {...tables[new_order.table_id]};
                                     return  new_order;
                                 });
-                                res.status(200).send({code: 200, data: JSON.stringify(orders)});
+                                res.status(200).send({code: 200, data: orders});
                             }
 
                         )

@@ -32,7 +32,7 @@ const HeaderComponent = props => {
     await AsyncStorage.removeItem('token');
     await AsyncStorage.removeItem('auth_data');
     changeSignInStatus(false);
-    await props.navigation.navigate('Login');
+    // await props.navigation.navigate('Login');
     setOpenMenu(!openMenu);
   };
 
@@ -102,7 +102,15 @@ const HeaderComponent = props => {
                 <Text>All reserves</Text>
               </Button>
             ) : null}
-
+            <Button
+              mode="contained"
+              style={{zIndex: 15000000, marginVertical: 10}}
+              onPress={() => {
+                setOpenMenu(false);
+                props.navigation.navigate('my_reserves_page');
+              }}>
+              <Text>My reserves</Text>
+            </Button>
             <Button
               mode="contained"
               style={{zIndex: 15000000, marginVertical: 10}}
@@ -114,7 +122,7 @@ const HeaderComponent = props => {
       </Portal>
     </View>
   ) : (
-    <View></View>
+    <View />
   );
 };
 

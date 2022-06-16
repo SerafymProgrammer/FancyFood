@@ -10,7 +10,7 @@ import {
   Linking,
 } from 'react-native';
 import HeaderComponent from '../header/header.component';
-import styles from './admin_page.styles';
+import styles from './my_reserves.styles';
 import {
   ActivityIndicator,
   Button,
@@ -22,18 +22,23 @@ import {
 } from 'react-native-paper';
 import {reducePrice, textOverflow} from '../../../../utils/helpers';
 import {ImagesContext} from '../../../../contexts/images.context';
-import {del_order, get_orders} from './admin_page.service';
+import {del_order, get_orders} from './my_reserves.service';
 import {DimensionsContext} from '../../../../contexts/dimensions.context';
+import {useSelector} from 'react-redux';
 
-const AdminPageComponent = props => {
+const MyReservesComponent = props => {
   const [orders, set_orders] = useState([]);
   const [is_loading, set_is_loading] = useState(false);
   const [order_status_modal, set_order_status_modal] = useState(false);
+  const auth_data = useSelector(state => {
+    return state.authReducer.auth_data;
+  });
   const images = useContext(ImagesContext);
   const {width, height} = useContext(DimensionsContext);
   const get_orders_ = () => {
     set_is_loading(true);
-    get_orders().then(res => {
+    get_orders(auth_data.user_id).then(res => {
+        console.log(res)
       set_orders(
         res.data
           .sort((a, b) => b.date - a.date)
@@ -53,7 +58,7 @@ const AdminPageComponent = props => {
 
   return (
     <View style={styles.mainContainer}>
-      <HeaderComponent title={'All reserves'} navigation={props.navigation} />
+      <HeaderComponent title={'My reserves'} navigation={props.navigation} />
       {/* require('./interer.jpg') */}
       <ImageBackground
         source={images.menu_interer}
@@ -85,58 +90,6 @@ const AdminPageComponent = props => {
                     <Title>{item.table.title}</Title>
                   </Card.Content>
                   <View style={{paddingHorizontal: 10, marginTop: 10}}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginLeft: 10,
-                      }}>
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontSize: 16,
-                          fontWeight: 'bold',
-                        }}>
-                        Username:{' '}
-                      </Text>
-                      <Text
-                        style={{
-                          color: 'black',
-                          textDecorationLine: 'underline',
-                          fontSize: 16,
-                        }}>
-                        {item.user_data.login}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        marginLeft: 10,
-                      }}>
-                      <Text
-                        style={{
-                          color: 'black',
-                          fontSize: 16,
-                          marginVertical: 12,
-                          fontWeight: 'bold',
-                        }}>
-                        Phone:{' '}
-                      </Text>
-                      <TouchableOpacity
-                        onPress={() => {
-                          Linking.openURL(`tel:${item.user_data.phone}`);
-                        }}>
-                        <Text
-                          style={{
-                            color: 'black',
-                            textDecorationLine: 'underline',
-                            fontSize: 16,
-                          }}>
-                          {item.user_data.phone}
-                        </Text>
-                      </TouchableOpacity>
-                    </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Checkbox status={'checked'} disabled={true} style={{}} />
                       <Text style={{color: 'black', fontSize: 16}}>
@@ -235,8 +188,6 @@ const AdminPageComponent = props => {
                         style={{
                           // marginHorizontal: 10,
                           width: '100%',
-
-                          // marginTop: 10,
                         }}>
                         {'RESERVED'}
                       </Button>
@@ -304,22 +255,22 @@ const AdminPageComponent = props => {
           </Dialog.Content>
         </Dialog>
       </Portal>
-      {/*<Button*/}
-      {/*  mode="contained"*/}
-      {/*  onPress={() => {*/}
-      {/*    props.navigation.navigate('menu_page');*/}
-      {/*  }}*/}
-      {/*  style={{*/}
-      {/*    position: 'absolute',*/}
-      {/*    bottom: 100,*/}
-      {/*    width: 200,*/}
-      {/*    left: (width - 200) / 2,*/}
-      {/*    right: (width - 200) / 2,*/}
-      {/*  }}>*/}
-      {/*  GO TO MAIN PAGE*/}
-      {/*</Button>*/}
+      <Button
+        mode="contained"
+        onPress={() => {
+          props.navigation.navigate('menu_page');
+        }}
+        style={{
+          position: 'absolute',
+          bottom: 100,
+          width: 200,
+          left: (width - 200) / 2,
+          right: (width - 200) / 2,
+        }}>
+        GO TO MAIN PAGE
+      </Button>
     </View>
   );
 };
 
-export default AdminPageComponent;
+export default MyReservesComponent;

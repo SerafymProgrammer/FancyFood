@@ -12,8 +12,8 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     backgroundColor: '#ffffff',
-    height: '100%',
-    paddingBottom: 100,
+    // height: '100%',
+     paddingBottom: 12,
   },
 
   login_logo_img: {

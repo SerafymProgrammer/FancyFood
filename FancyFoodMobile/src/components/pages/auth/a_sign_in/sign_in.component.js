@@ -56,7 +56,14 @@ const SignInComponent = props => {
       password,
     });
     await auth_request(form_data).then(async res => {
-      console.log(res);
+      if (res.code !== 200) {
+        ToastAndroid.showWithGravity(
+          res.msg,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+        return;
+      }
       if (res.code === 200 && res.token) {
         console.log('success');
         ToastAndroid.showWithGravity(
