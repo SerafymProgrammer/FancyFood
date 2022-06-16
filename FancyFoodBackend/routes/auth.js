@@ -50,7 +50,7 @@ const authRoutes = (app, fs) => {
                 res.status(500).send({code: 500, msg:'password is wrong'});
                 return
             }
-            res.status(200).send({code: 200, token: sha1(JSON.stringify(req_user))
+            res.status(200).send({code: 200, token: sha1(JSON.stringify(req_user)), auth_data:req_user
             });
         });
     });

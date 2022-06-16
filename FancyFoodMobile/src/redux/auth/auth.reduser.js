@@ -1,7 +1,8 @@
-import {IS_SIGN_IN} from './auth.types';
+import {IS_SIGN_IN, SET_AUTH_DATA} from './auth.types';
 
 const initialState = {
   is_sig_in: false,
+  auth_data: null,
 };
 
 export const authReducer = (state = initialState, action) => {
@@ -10,6 +11,12 @@ export const authReducer = (state = initialState, action) => {
       return {
         ...state,
         is_sig_in: action.is_sig_in,
+      };
+    }
+    case SET_AUTH_DATA: {
+      return {
+        ...state,
+        auth_data: action.auth_data,
       };
     }
     default:

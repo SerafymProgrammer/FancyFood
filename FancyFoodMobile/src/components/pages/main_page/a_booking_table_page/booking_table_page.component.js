@@ -36,6 +36,10 @@ const BookingTableComponent = props => {
   const [food, setFood] = React.useState([]);
   const [add_food_dialog_show, set_add_food_dialog_show] =
     React.useState(false);
+
+  const auth_data = useSelector(state => {
+    return state.authReducer.auth_data;
+  });
   const menu_data = useSelector(state => {
     return state.homeReducer.menu;
   });
@@ -50,14 +54,19 @@ const BookingTableComponent = props => {
       alert('Please select time');
       return;
     }
-    let date_ = new Date(
+    let date_without_time = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate(),
+    );
+    let date_with_time = new Date(
       date.getFullYear(),
       date.getMonth(),
       date.getDate(),
       time.getHours(),
       time.getMinutes(),
     );
-    get_free_tables(date_).then(res => {
+    get_free_tables(date_with_time).then(res => {
       set_tables_to_order(res.data);
     });
   };
@@ -85,8 +94,9 @@ const BookingTableComponent = props => {
       table_id: id_reserve,
       dishes: food.map(dish => dish.dish_id),
       need_call: call_admin,
+      comment,
       address: '',
-      user_id: '',
+      user_id: auth_data.user_id,
     };
     create_order(JSON.stringify(order)).then(res => {
       if (res.code === 200) {

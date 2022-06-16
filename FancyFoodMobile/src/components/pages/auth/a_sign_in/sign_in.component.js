@@ -20,6 +20,11 @@ const SignInComponent = props => {
     [dispatch],
   );
 
+  const changeAuthData = useCallback(
+    data => dispatch(authActions.setAuthData(data)),
+    [dispatch],
+  );
+
   const auth = async () => {
     let have_errs = false;
 
@@ -60,6 +65,8 @@ const SignInComponent = props => {
           ToastAndroid.CENTER,
         );
         await AsyncStorage.setItem('token', res.token);
+        await AsyncStorage.setItem('auth_data', JSON.stringify(res.auth_data));
+        changeAuthData(res.auth_data);
         changeSignInStatus(true);
       }
     });

@@ -19,9 +19,7 @@ const server = app.listen(3001, () => {
 
 fs.readFile(
     './migration_config.json', 'utf8', (err, data) =>{
-        console.log('hahaah')
         let config = JSON.parse(data);
-        console.log(config)
         if (!config.success_migration) {
             migrations(app, fs)
         }

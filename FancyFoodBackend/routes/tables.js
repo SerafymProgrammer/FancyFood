@@ -33,8 +33,7 @@ const tablesRoutes = (app, fs) => {
 
     // READ
     app.get('/free_tables', (req, res) => {
-        console.log('hasb hdcsbf')
-       let date_time = req.params.date_time;
+       let date_time = new Date(Number(req.query.date_time));
         fs.readFile(
             dataPathOrders, 'utf8',
             (err, data_orders) => {
@@ -49,7 +48,21 @@ const tablesRoutes = (app, fs) => {
                         orders = Object.values(orders);
                         let tables = JSON.parse(data_tables)
                         tables = Object.values(tables);
-                        orders = orders.filter(order=>order.date>=date_time);
+
+
+                        orders = orders.filter(order=> {
+                            let order_date =new Date(Number(order.date));
+                            let compare_year = order_date.getFullYear() === date_time.getFullYear();
+                            let compare_month = order_date.getMonth() === date_time.getMonth();
+                            let compare_date = order_date.getDate() === date_time.getDate();
+
+                            let order_h =order_date.getHours();
+                            let req_date_h =date_time.getHours();
+                            let diff_times = Math.abs(order_h-req_date_h);
+                            let compares_hours = diff_times<=3;
+
+                            return  compare_year&&compare_month&&compare_date&&compares_hours
+                        });
                         orders.forEach((order)=>{
                             tables=tables.map(table=>({...table, status:table.table_id===order.table_id?'reserved': table.status, }))
                         })

@@ -1,7 +1,7 @@
 import {MAIN_URL} from '../../../../../env.consts';
 
 export const get_free_tables = datetime => {
-  let url = `${MAIN_URL}/free_tables?${datetime.getTime()}`;
+  let url = `${MAIN_URL}/free_tables?date_time=${datetime.getTime()}`;
   return fetch(url).then(res => res.json());
 };
 

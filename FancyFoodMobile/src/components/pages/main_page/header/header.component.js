@@ -9,7 +9,9 @@ const HeaderComponent = props => {
   const MORE_ICON = 'dots-vertical';
   const [openMenu, setOpenMenu] = React.useState(false);
   const [currUser, setCurrUser] = React.useState(null);
-
+  const auth_data = useSelector(state => {
+    return state.authReducer.auth_data;
+  });
   const is_sign_in = useSelector(state => {
     return state.authReducer.is_sig_in;
   });
@@ -28,6 +30,7 @@ const HeaderComponent = props => {
 
   const logaut = async () => {
     await AsyncStorage.removeItem('token');
+    await AsyncStorage.removeItem('auth_data');
     changeSignInStatus(false);
     await props.navigation.navigate('Login');
     setOpenMenu(!openMenu);
@@ -88,13 +91,13 @@ const HeaderComponent = props => {
               paddingHorizontal: 10,
               paddingVertical: 10,
             }}>
-            {is_sign_in.isAdmin ? (
+            {auth_data.isAdmin ? (
               <Button
                 mode="contained"
                 style={{zIndex: 15000000, marginVertical: 10}}
                 onPress={() => {
                   setOpenMenu(false);
-                  props.navigation.navigate('All_Reserves');
+                  props.navigation.navigate('admin_panel');
                 }}>
                 <Text>All reserves</Text>
               </Button>

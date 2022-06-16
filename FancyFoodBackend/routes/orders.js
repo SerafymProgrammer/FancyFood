@@ -5,6 +5,7 @@ const ordersRoutes = (app, fs) => {
     const dataPathTables= './data/tables.json';
     const dataPathOrders = './data/orders.json';
     const dataPathDishes= './data/dishes.json';
+    const dataPathUsers= './data/users.json';
 
     const writeFile = (fileData, callback, filePath = dataPathOrders, encoding = 'utf8') => {
         console.log(fileData, callback, filePath)
@@ -45,7 +46,7 @@ const ordersRoutes = (app, fs) => {
                         });
                         fs.readFile(
                             dataPathTables, 'utf8',
-                            (err, data_tables)=>{
+                            (verr, data_tables)=>{
                                 let tables = JSON.parse(data_tables)
 
                                 orders = orders.map(( order)=> {
@@ -53,7 +54,16 @@ const ordersRoutes = (app, fs) => {
                                     new_order.table = {...tables[new_order.table_id]};
                                     return  new_order;
                                 });
-                                res.status(200).send({code: 200, data: JSON.stringify(orders)});
+                                fs.readFile(
+                                    dataPathUsers, 'utf8',(err, users_)=>{
+                                        let users = JSON.parse(users_);
+                                        orders = orders.map(( order)=> {
+                                            let new_order = {...order};
+                                            new_order.user_data = {...users[new_order.user_id]};
+                                            return  new_order;
+                                        });
+                                        res.status(200).send({code: 200, data: orders});
+                                    })
                             }
 
                         )
