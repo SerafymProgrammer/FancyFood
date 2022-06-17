@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {
   AsyncStorage,
+  Image,
   Text,
   TextInput,
   ToastAndroid,
@@ -13,6 +14,7 @@ import {Button, Title} from 'react-native-paper';
 import PhoneInput from 'react-native-phone-number-input';
 import {register_request} from './sign_up.service';
 import UiInputComponent from '../ui_form_components/ui_input/ui_input.component';
+import {ImagesContext} from '../../../../contexts/images.context';
 
 const SignUpComponent = props => {
   const [login, setLogin] = React.useState('');
@@ -24,6 +26,7 @@ const SignUpComponent = props => {
   const [errorsPhone, setErrorsPhone] = React.useState(null);
   const [isFocusedPhone, setIsFocusedPhone] = React.useState(null);
   const phoneInput = React.useRef(null);
+  const images = useContext(ImagesContext);
   const regist = async () => {
     let have_errs = false;
 
@@ -75,17 +78,17 @@ const SignUpComponent = props => {
   return (
     <View style={styles.sectionContainer}>
       <View style={{alignItems: 'center', marginTop: 20}}>
-        {/*<Image*/}
-        {/*  source={'s'}*/}
-        {/*  style={{*/}
-        {/*    width: '80%',*/}
-        {/*    marginTop: 5,*/}
-        {/*    borderRadius: 0,*/}
-        {/*    borderWidth: 2,*/}
-        {/*    height: 80,*/}
-        {/*    borderColor: '#000000',*/}
-        {/*  }}*/}
-        {/*/>*/}
+        <Image
+          source={images.logo_full}
+          style={{
+            width: '60%',
+            marginTop: 5,
+            borderRadius: 0,
+            borderWidth: 2,
+            height: 50,
+            borderColor: '#000000',
+          }}
+        />
       </View>
       <Title style={styles.title}>Register</Title>
       <View style={styles.inputWrap}>

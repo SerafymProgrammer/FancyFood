@@ -9,11 +9,11 @@ const styles = StyleSheet.create({
   },
 
   login_logo_img: {
-    width: '80%',
+    width: '60%',
     marginTop: 5,
     borderRadius: 0,
     borderWidth: 2,
-    height: 80,
+    height: 50,
     borderColor: '#000000',
   },
 

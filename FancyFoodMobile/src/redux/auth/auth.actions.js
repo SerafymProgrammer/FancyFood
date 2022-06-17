@@ -8,7 +8,6 @@ export const authActions = {
     };
   },
   setAuthData: auth_data => {
-    console.log(auth_data);
     return {
       type: SET_AUTH_DATA,
       auth_data,

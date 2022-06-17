@@ -1,14 +1,16 @@
-import React, {useCallback} from 'react';
-import {Text, View, Image} from 'react-native';
+import React, {useCallback, useContext} from 'react';
+import {Text, View, Image, TouchableHighlight, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {authActions} from '../../../../redux/auth/auth.actions';
 import {Button, Dialog, IconButton, Portal} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {ImagesContext} from '../../../../contexts/images.context';
 
 const HeaderComponent = props => {
   const MORE_ICON = 'dots-vertical';
   const [openMenu, setOpenMenu] = React.useState(false);
   const [currUser, setCurrUser] = React.useState(null);
+  const images = useContext(ImagesContext);
   const auth_data = useSelector(state => {
     return state.authReducer.auth_data;
   });
@@ -63,10 +65,20 @@ const HeaderComponent = props => {
             alignItems: 'center',
             zIndex: 15000000,
           }}>
-          {/*<Image*/}
-          {/*  source={require('./images/mini_logo.jpg')}*/}
-          {/*  style={{height: 50, width: 55, marginLeft: 10}}*/}
-          {/*/>*/}
+          <TouchableOpacity
+            onPress={() => props.navigation.navigate('menu_page')}>
+            <Image
+              source={images.logo_mini}
+              style={{
+                height: 40,
+                width: 80,
+                marginLeft: 10,
+                borderWidth: 2,
+                borderColor: '#c2c2c2',
+              }}
+            />
+          </TouchableOpacity>
+
           <Text style={{marginLeft: 20, fontSize: 20, color: '#fff'}}>
             {props.title}
           </Text>

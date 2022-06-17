@@ -38,7 +38,6 @@ const MyReservesComponent = props => {
   const get_orders_ = () => {
     set_is_loading(true);
     get_orders(auth_data.user_id).then(res => {
-        console.log(res)
       set_orders(
         res.data
           .sort((a, b) => b.date - a.date)
@@ -53,7 +52,6 @@ const MyReservesComponent = props => {
   }, []);
 
   useEffect(() => {
-    console.log(orders.length);
   }, [orders]);
 
   return (
@@ -255,20 +253,20 @@ const MyReservesComponent = props => {
           </Dialog.Content>
         </Dialog>
       </Portal>
-      <Button
-        mode="contained"
-        onPress={() => {
-          props.navigation.navigate('menu_page');
-        }}
-        style={{
-          position: 'absolute',
-          bottom: 100,
-          width: 200,
-          left: (width - 200) / 2,
-          right: (width - 200) / 2,
-        }}>
-        GO TO MAIN PAGE
-      </Button>
+      {/*<Button*/}
+      {/*  mode="contained"*/}
+      {/*  onPress={() => {*/}
+      {/*    props.navigation.navigate('menu_page');*/}
+      {/*  }}*/}
+      {/*  style={{*/}
+      {/*    position: 'absolute',*/}
+      {/*    bottom: 100,*/}
+      {/*    width: 200,*/}
+      {/*    left: (width - 200) / 2,*/}
+      {/*    right: (width - 200) / 2,*/}
+      {/*  }}>*/}
+      {/*  GO TO MAIN PAGE*/}
+      {/*</Button>*/}
     </View>
   );
 };

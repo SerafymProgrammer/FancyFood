@@ -7,6 +7,8 @@ const ImagesContextProvider = props => {
     <ImagesContext.Provider
       value={{
         menu_interer: require('../assets/images/menu_interer.jpg'),
+        logo_mini: require('../assets/images/logo_mini.jpg'),
+        logo_full: require('../assets/images/full_logo.jpg'),
       }}>
       {props.children}
     </ImagesContext.Provider>

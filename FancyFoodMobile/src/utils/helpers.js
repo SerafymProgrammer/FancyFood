@@ -2,7 +2,6 @@ export const reducePrice = arr => {
   // console.log(Number(element.price))
   let reducer = 0;
   arr.forEach(element => {
-    console.log(Number(element.price));
     reducer += Number(element.price);
   });
   // (accumulator, item) => accumulator + Number(item.price);
@@ -21,6 +20,5 @@ export function textOverflow(count, str) {
 export function formatted_time(time) {
   let h = time.getHours() + '';
   let m = time.getMinutes() + '';
-  console.log(h, m);
   return `${h.length < 2 ? `0${h}` : h} : ${m.length < 2 ? `0${m}` : m}`;
 }

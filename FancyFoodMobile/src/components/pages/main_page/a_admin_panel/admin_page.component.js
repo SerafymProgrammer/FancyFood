@@ -48,7 +48,7 @@ const AdminPageComponent = props => {
   }, []);
 
   useEffect(() => {
-    console.log(orders.length);
+
   }, [orders]);
 
   return (

@@ -123,8 +123,6 @@ const BookingTableComponent = props => {
       if (res.code === 200) {
         set_tables_to_order(prevState => {
           let new_data = {...prevState};
-          console.log('room_key', room_key);
-          console.log('id_reserve', id_reserve);
           new_data[room_key] = new_data[room_key].map(table =>
             table.table_id === id_reserve
               ? {...table, status: 'reserved'}
@@ -136,7 +134,6 @@ const BookingTableComponent = props => {
         set_call_admin(false);
         set_id_reserve('');
       }
-      console.log(res);
     });
   };
   return (
@@ -229,7 +226,7 @@ const BookingTableComponent = props => {
                         borderRadius: 12,
                         paddingVertical: 16,
                         paddingHorizontal: 12,
-                        marginBottom: 12,
+                        // marginBottom: 12,
                       }}>
                       <View
                         style={{
@@ -251,7 +248,7 @@ const BookingTableComponent = props => {
                     {accordion_manager[key_]
                       ? tables_to_order[key_].map((table, ind) => (
                           <Card
-                            style={{marginBottom: 10, paddingBottom: 20}}
+                            style={{marginTop: 12, paddingBottom: 20}}
                             key={table.table_id}>
                             <Card.Cover
                               source={{uri: table.image}}
