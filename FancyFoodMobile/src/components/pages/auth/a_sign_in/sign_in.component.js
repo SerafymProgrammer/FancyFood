@@ -67,7 +67,7 @@ const SignInComponent = props => {
       }
       if (res.code === 200 && res.token) {
         ToastAndroid.showWithGravity(
-          'Success authorization!',
+          'Успішно авторизовано!',
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
@@ -82,13 +82,13 @@ const SignInComponent = props => {
   return (
     <View style={styles.loginContainer}>
       <View style={{alignItems: 'center', marginTop: 20}}>
-        <Image source={ images.logo_full} style={styles.login_logo_img} />
+        <Image source={images.logo_full} style={styles.login_logo_img} />
       </View>
 
-      <Title style={styles.title}>Authorization</Title>
+      <Title style={styles.title}>Авторизація</Title>
       <UiInputComponent
         error={errorsLogin}
-        label="login"
+        label="Логін"
         value={login}
         onChangeText={text => {
           setErrorsLogin(null);
@@ -98,7 +98,7 @@ const SignInComponent = props => {
 
       <UiInputComponent
         error={errorsPassword}
-        label="password"
+        label="Пароль"
         value={password}
         onChangeText={text => {
           setErrorsPassword(null);
@@ -111,12 +111,12 @@ const SignInComponent = props => {
         onPress={() => {
           auth();
         }}>
-        Login
+        Увійти
       </Button>
 
       <TouchableOpacity onPress={() => props.navigation.navigate('sign_up')}>
         <Text style={styles.haveAnAccText}>
-          Do not have an acc? Go to register
+          Немає облікового запису? Зареєструйтесь
         </Text>
       </TouchableOpacity>
     </View>

@@ -64,9 +64,16 @@ const SignUpComponent = props => {
       password,
     });
     await register_request(form_data).then(res => {
+      if (res.code !== 200) {
+        ToastAndroid.showWithGravity(
+          res.msg,
+          ToastAndroid.SHORT,
+          ToastAndroid.CENTER,
+        );
+      }
       if (res.code === 200) {
         ToastAndroid.showWithGravity(
-          'Success registration!',
+          'Успішно зареєстровано!',
           ToastAndroid.SHORT,
           ToastAndroid.CENTER,
         );
@@ -90,7 +97,7 @@ const SignUpComponent = props => {
           }}
         />
       </View>
-      <Title style={styles.title}>Register</Title>
+      <Title style={styles.title}>Реєстрація</Title>
       <View style={styles.inputWrap}>
         <PhoneInput
           textContainerStyle={{backgroundColor: '#e7e7e7'}}
@@ -129,7 +136,7 @@ const SignUpComponent = props => {
       </View>
       <UiInputComponent
         error={errorsLogin}
-        label="login"
+        label="Логін"
         value={login}
         onChangeText={text => {
           setErrorsLogin(null);
@@ -138,7 +145,7 @@ const SignUpComponent = props => {
       />
       <UiInputComponent
         error={errorsPassword}
-        label="password"
+        label="Пароль"
         value={password}
         onChangeText={text => {
           setErrorsPassword(null);
@@ -147,12 +154,12 @@ const SignUpComponent = props => {
       />
 
       <Button mode="contained" onPress={() => regist()}>
-        Register
+        Зареєструватися
       </Button>
 
       <TouchableOpacity onPress={() => props.navigation.navigate('sign_in')}>
         <Text style={styles.haveAnAccText}>
-          Already have an acc? Go to login
+          Вже є обліковий запис? Увійдіть
         </Text>
       </TouchableOpacity>
     </View>

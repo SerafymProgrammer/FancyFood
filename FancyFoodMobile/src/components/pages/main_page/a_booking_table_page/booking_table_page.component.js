@@ -34,6 +34,14 @@ import styles from './booking_table_page.styles';
 import {DimensionsContext} from '../../../../contexts/dimensions.context';
 import {ImagesContext} from '../../../../contexts/images.context';
 
+const localization_booking_table_page = {
+  banket: 'Банкетний зал',
+  hall: 'Основний зал',
+  soups: 'Супи',
+  salads: 'Салати',
+  deserts: 'Десерти',
+};
+
 const BookingTableComponent = props => {
   const [comment, set_comment] = useState('');
   const [date, set_date] = useState(new Date());
@@ -78,7 +86,7 @@ const BookingTableComponent = props => {
       time.getHours(),
       time.getMinutes(),
     );
-    set_tables_to_order({})
+    set_tables_to_order({});
     set_is_loading(true);
     get_free_tables(date_with_time).then(res => {
       let res_data_keys = Object.keys(res.data);
@@ -138,7 +146,10 @@ const BookingTableComponent = props => {
   };
   return (
     <View>
-      <HeaderComponent title={'Reserve table'} navigation={props.navigation} />
+      <HeaderComponent
+        title={'Бронювання столиків'}
+        navigation={props.navigation}
+      />
       <ImageBackground
         source={images.menu_interer}
         style={{
@@ -162,12 +173,13 @@ const BookingTableComponent = props => {
                   set_date(d_);
                 },
                 mode: 'date',
+                minimumDate: new Date(),
                 is24Hour: true,
               });
             }}
             style={styles.date_time_touchables}>
-            <Text style={{color: date ? 'black' : '#c2bdbd'}}>
-              {date ? date.toLocaleDateString() : 'Select date'}
+            <Text style={{color: date ? 'black' : '#ffffff'}}>
+              {date ? date.toLocaleDateString() : 'Оберіть дату'}
             </Text>
           </TouchableOpacity>
 
@@ -184,7 +196,7 @@ const BookingTableComponent = props => {
             }}
             style={styles.date_time_touchables}>
             <Text style={{color: time ? 'black' : '#ffffff'}}>
-              {time ? `${formatted_time(time)}` : 'Select time'}
+              {time ? `${formatted_time(time)}` : 'Оберіть час'}
             </Text>
           </TouchableOpacity>
 
@@ -194,7 +206,7 @@ const BookingTableComponent = props => {
             onPress={() => {
               get_tables();
             }}>
-            Show Tables
+            Показати столики
           </Button>
 
           {Object.keys(tables_to_order).length ? (
@@ -235,7 +247,7 @@ const BookingTableComponent = props => {
                           justifyContent: 'space-between',
                         }}>
                         <Text style={{color: 'black', fontSize: 18}}>
-                          {key_}
+                          {localization_booking_table_page[key_]}
                         </Text>
                         <Icon
                           style={{fontSize: 22, color: 'black'}}
@@ -279,7 +291,7 @@ const BookingTableComponent = props => {
                                     }}
                                   />
                                   <Text style={{color: 'black'}}>
-                                    The administrator will call you back
+                                    Адміністратор має передзвонити
                                   </Text>
                                 </View>
                                 {food.length ? (
@@ -291,7 +303,7 @@ const BookingTableComponent = props => {
                                       marginVertical: 10,
                                       color: 'black',
                                     }}>
-                                    Total price: {reducePrice(food) + '$'}
+                                    Загальна вартість: {reducePrice(food) + '$'}
                                   </Text>
                                 ) : null}
                                 {food.length ? (
@@ -354,11 +366,11 @@ const BookingTableComponent = props => {
                                     marginTop: 10,
                                     marginBottom: 10,
                                   }}>
-                                  Add food
+                                  Додати їжу
                                 </Button>
                                 <UiInputComponent
                                   mode={'outlined'}
-                                  label="Your comment"
+                                  label="Коментар"
                                   value={comment}
                                   onChangeText={text => {
                                     // setErrorsLogin(null);
@@ -382,7 +394,7 @@ const BookingTableComponent = props => {
                                       width: '100%',
                                       // marginTop: 10,
                                     }}>
-                                    To Confirm
+                                    Підтвердіть бронювання
                                   </Button>
                                 </View>
                               </View>
@@ -398,8 +410,8 @@ const BookingTableComponent = props => {
                                   disabled={table.status === 'reserved'}
                                   style={{}}>
                                   {table.status === 'reserved'
-                                    ? 'Reserved'
-                                    : 'To reserve'}
+                                    ? 'Заброньовано'
+                                    : 'Забронювати'}
                                 </Button>
                               </View>
                             )}
@@ -416,14 +428,13 @@ const BookingTableComponent = props => {
                 flexDirection: 'row',
                 justifyContent: 'center',
                 width,
-
                 padding: 12,
               }}>
               {is_loading ? (
                 <ActivityIndicator />
               ) : (
                 <Text style={{color: '#c9a19c', fontSize: 16, marginTop: 12}}>
-                  Select date please
+                  Оберіть дату
                 </Text>
               )}
             </View>
@@ -434,7 +445,7 @@ const BookingTableComponent = props => {
               dismissable={false}
               // onDismiss={() => set_add_food_dialog_show(false)}
             >
-              <Dialog.Title>Select food</Dialog.Title>
+              <Dialog.Title>Оберіть їжу</Dialog.Title>
               <View style={{borderTopWidth: 2, height: 400}}>
                 <ScrollView
                   style={{
@@ -445,7 +456,7 @@ const BookingTableComponent = props => {
                   <View style={{paddingHorizontal: 10}}>
                     {Object.keys(menu_data).map((item, index) => (
                       <List.Accordion
-                        title={item}
+                        title={localization_booking_table_page[item]}
                         id={index}
                         style={{
                           backgroundColor: '#c2c2c2',
@@ -506,10 +517,10 @@ const BookingTableComponent = props => {
                   justifyContent: 'space-around',
                 }}>
                 <Button onPress={() => set_add_food_dialog_show(false)}>
-                  Cancel
+                  Скасувати
                 </Button>
                 <Button onPress={() => set_add_food_dialog_show(false)}>
-                  Done
+                  Підтвердити
                 </Button>
               </Dialog.Actions>
             </Dialog>

@@ -51,12 +51,11 @@ const MyReservesComponent = props => {
     get_orders_();
   }, []);
 
-  useEffect(() => {
-  }, [orders]);
+  useEffect(() => {}, [orders]);
 
   return (
     <View style={styles.mainContainer}>
-      <HeaderComponent title={'My reserves'} navigation={props.navigation} />
+      <HeaderComponent title={'Мої бронювання'} navigation={props.navigation} />
       {/* require('./interer.jpg') */}
       <ImageBackground
         source={images.menu_interer}
@@ -91,7 +90,7 @@ const MyReservesComponent = props => {
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Checkbox status={'checked'} disabled={true} style={{}} />
                       <Text style={{color: 'black', fontSize: 16}}>
-                        The administrator should call back{' '}
+                        Адміністратор має передзвонити{' '}
                       </Text>
                     </View>
                     <Text
@@ -102,7 +101,7 @@ const MyReservesComponent = props => {
                         fontWeight: 'bold',
                         marginVertical: 12,
                       }}>
-                      Total price: {reducePrice(item.dishes) + '$'}
+                      Загальна вартість: {reducePrice(item.dishes) + '$'}
                     </Text>
 
                     {item.dishes.length ? (
@@ -142,7 +141,7 @@ const MyReservesComponent = props => {
                         marginVertical: 5,
                         marginLeft: 10,
                       }}>
-                      <Text style={{fontSize: 18, color: 'black'}}>Date: </Text>
+                      <Text style={{fontSize: 18, color: 'black'}}>Дата: </Text>
 
                       <Text style={{fontSize: 18, color: 'black'}}>
                         {item.date.toLocaleDateString()}
@@ -154,7 +153,7 @@ const MyReservesComponent = props => {
                         marginVertical: 5,
                         marginLeft: 10,
                       }}>
-                      <Text style={{fontSize: 18, color: 'black'}}>Time: </Text>
+                      <Text style={{fontSize: 18, color: 'black'}}>Час: </Text>
 
                       <Text style={{fontSize: 18, color: 'black'}}>
                         {item.date.toLocaleTimeString()}
@@ -168,7 +167,7 @@ const MyReservesComponent = props => {
                         marginLeft: 10,
                       }}>
                       <Text style={{fontSize: 18, color: 'black'}}>
-                        Comment:{' '}
+                        Коментар:{' '}
                       </Text>
 
                       <Text style={{fontSize: 18, color: 'black'}}>
@@ -187,7 +186,7 @@ const MyReservesComponent = props => {
                           // marginHorizontal: 10,
                           width: '100%',
                         }}>
-                        {'RESERVED'}
+                        {'ЗАБРОНЬОВАНО'}
                       </Button>
                     </View>
                   </View>
@@ -208,7 +207,7 @@ const MyReservesComponent = props => {
               <ActivityIndicator />
             ) : (
               <Text style={{color: '#c9a19c', fontSize: 22}}>
-                No any orders
+                Немає жодних замовлень
               </Text>
             )}
           </View>
@@ -241,14 +240,14 @@ const MyReservesComponent = props => {
                     );
                     set_order_status_modal(false);
                     ToastAndroid.showWithGravity(
-                      'Success break order!',
+                      'Бронювання успішно скасовано!',
                       ToastAndroid.SHORT,
                       ToastAndroid.CENTER,
                     );
                   }
                 });
               }}>
-              <Text>Break order</Text>
+              <Text>Скасувати бронювання</Text>
             </Button>
           </Dialog.Content>
         </Dialog>

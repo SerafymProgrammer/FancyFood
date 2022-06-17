@@ -24,6 +24,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {homeActions} from '../../../../redux/home/home.actions';
 import {ImagesContext} from '../../../../contexts/images.context';
 
+const localization_menu_page = {
+  banket: 'Банкетний зал',
+  hall: 'Основний зал',
+  soups: 'Супи',
+  salads: 'Салати',
+  deserts: 'Десерти',
+};
 const MenuPageComponent = props => {
   const [accordion_manager, set_accordion_manager] = useState({});
   const images = useContext(ImagesContext);
@@ -62,8 +69,8 @@ const MenuPageComponent = props => {
 
   return menu_data ? (
     <View style={styles.mainContainer}>
-      <HeaderComponent title={'Menu'} navigation={props.navigation} />
-      {/* require('./interer.jpg') */}
+      <HeaderComponent title={'Меню'} navigation={props.navigation} />
+
       <ImageBackground
         source={images.menu_interer}
         style={{
@@ -74,12 +81,14 @@ const MenuPageComponent = props => {
           width: '100%',
         }}>
         <ScrollView
-          style={{
-            // backgroundColor:'#000000a0',
-            // width: '100%',
-            // height,
-          }}>
-          <View style={{paddingHorizontal: 10,}}>
+          style={
+            {
+              // backgroundColor:'#000000a0',
+              // width: '100%',
+              // height,
+            }
+          }>
+          <View style={{paddingHorizontal: 10}}>
             {Object.keys(menu_data).map((item, index) => {
               return (
                 <View
@@ -109,13 +118,22 @@ const MenuPageComponent = props => {
                       paddingVertical: 16,
                       paddingHorizontal: 12,
                     }}>
-                      <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
-                          <Text style={{color: 'black', fontSize: 18,}}>{item}</Text>
-                          <Icon
-                              style={{fontSize: 22, color: 'black'}}
-                              name={accordion_manager[item] ? 'angle-up' : 'angle-down'}/>
-                      </View>
-
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text style={{color: 'black', fontSize: 18}}>
+                        {localization_menu_page[item]}
+                      </Text>
+                      <Icon
+                        style={{fontSize: 22, color: 'black'}}
+                        name={
+                          accordion_manager[item] ? 'angle-up' : 'angle-down'
+                        }
+                      />
+                    </View>
                   </TouchableOpacity>
                   {accordion_manager[item]
                     ? menu_data[item].map((el, ind) => (
@@ -148,7 +166,7 @@ const MenuPageComponent = props => {
           left: (width - 200) / 2,
           right: (width - 200) / 2,
         }}>
-        Reserve a table
+        Забронювати столик
       </Button>
     </View>
   ) : (
